@@ -1,57 +1,34 @@
 package com.openclassrooms.Openclassrooms_FS_P13_POC.controller;
 
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import com.openclassrooms.Openclassrooms_FS_P13_POC.DTOs.UserDTO;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.models.User;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.services.UserService;
 
-import lombok.RequiredArgsConstructor;
-
-@Controller
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from http://localhost:4200
-@RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
-	
-	private final UserService userService;
-	
-	@PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User loginUser) {
-        User authenticatedUser = userService.authenticate(loginUser.getEmail(), loginUser.getPassword());
-        if (authenticatedUser != null) {
-            return ResponseEntity.ok(authenticatedUser);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-	
-	@MessageMapping("/user.addUser")
-	@SendTo("/user/topic")
-	public User addUser(@Payload User user) {
-		User savedUser = userService.saveUser(user);
-		return savedUser;
+
+	@Autowired
+	private UserService userService;
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") String id) {
+		try {
+			User user = userService.findById(Long.valueOf(id));
+			if (user == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+			}
+			return ResponseEntity.ok().body(user);
+		} catch (NumberFormatException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format");
+		}
 	}
-	
-	@MessageMapping("/user.disconnectUser")
-	@SendTo("/user/topic")
-	public User disconnect(@Payload User user) {
-		User disconnectedUser = userService.disconnect(user);
-		userService.disconnect(disconnectedUser);
-		return disconnectedUser;
-	}
-	
-	@GetMapping("/users")
-	public ResponseEntity<List<User>> findConnectedUsers(){
-		return ResponseEntity.ok(userService.findConnectedUser());
-	}
+
 }
