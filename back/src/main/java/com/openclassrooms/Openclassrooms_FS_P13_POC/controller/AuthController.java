@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.models.User;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.LoginRequest;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.LoginResponse;
+import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.MessageResponse;
+import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.RegisterRequest;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.services.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -21,9 +23,10 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 		try {
-			User userBasedOnEmail = userService.findByEmail(loginRequest.getEmailOrUsername());
+			User userBasedOnEmail = userService.findByEmail(loginRequest.getEmail());
+			System.out.println(loginRequest.getEmail());
 			if (userBasedOnEmail == null) {
-				User userBasedOnUsername = userService.findByUsername(loginRequest.getEmailOrUsername());
+				User userBasedOnUsername = userService.findByUsername(loginRequest.getEmail());
 				if (userBasedOnUsername == null) {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 				} else {
@@ -41,4 +44,18 @@ public class AuthController {
 		}
 	}
 
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+		try {
+
+			User user = userService.registerRequestToUser(registerRequest);
+			userService.save(user);
+			return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+
+		} catch (NumberFormatException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid registration request format");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed");
+		}
+	}
 }

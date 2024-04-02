@@ -3,16 +3,16 @@ package com.openclassrooms.Openclassrooms_FS_P13_POC.payloads;
 
 public class LoginRequest {
 
-	private String emailOrUsername;
+	private String email;
 	
 	private String password;
 
-	public String getEmailOrUsername() {
-		return emailOrUsername;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailOrUsername(String email) {
-		this.emailOrUsername = email;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {

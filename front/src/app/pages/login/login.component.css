@@ -6,28 +6,28 @@ main {
   align-items: center;
 }
 
-.login-form-title {
+.form-title {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.login-card {
+.card {
   width: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.login-form {
+.form {
   display: flex;
   flex-direction: column;
 }
 
-.login-form .login-form-field {
+.form .login-form-field {
   width: 280px;
 }
 
-.login-card button {
+.card button {
   margin-bottom: 20px;
 }

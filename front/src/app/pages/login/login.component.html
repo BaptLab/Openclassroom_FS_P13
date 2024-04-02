@@ -1,35 +1,123 @@
 <main>
-  <mat-card class="login-card">
-    <mat-card-content>
-      <h2 class="login-form-title title">Login</h2>
-      <form class="login-form form" (ngSubmit)="login()">
-        <mat-form-field class="form-field login-form-field">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            placeholder="Email"
-            [(ngModel)]="email"
-            name="email"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="form-field login-form-field">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            [(ngModel)]="password"
-            name="password"
-            required
-          />
-        </mat-form-field>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" type="submit">
-            Submit
-          </button>
-        </mat-card-actions>
-      </form>
-    </mat-card-content>
-  </mat-card>
+  <div class="container">
+    <!-- Login Form -->
+    <mat-card class="card">
+      <mat-card-content>
+        <h2 class="form-title title">Login</h2>
+        <form
+          class="form form"
+          (ngSubmit)="login(loginForm.value)"
+          #loginForm="ngForm"
+        >
+          <mat-form-field class="form-field form-field">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              placeholder="Email"
+              [(ngModel)]="email"
+              name="email"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="password"
+              required
+            />
+          </mat-form-field>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit">
+              Login
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="container">
+    <!-- Registration Form -->
+    <mat-card class="card">
+      <mat-card-content>
+        <h2 class="form-title title">Register</h2>
+        <form
+          class="form form"
+          (ngSubmit)="register(registrationForm.value)"
+          #registrationForm="ngForm"
+        >
+          <mat-form-field class="form-field form-field">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              placeholder="Email"
+              [(ngModel)]="registrationRequest.email"
+              name="email"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              placeholder="Last Name"
+              [(ngModel)]="registrationRequest.lastName"
+              name="lastName"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              placeholder="First Name"
+              [(ngModel)]="registrationRequest.firstName"
+              name="firstName"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>Birth Date</mat-label>
+            <input
+              matInput
+              type="date"
+              placeholder="Birth Date"
+              [(ngModel)]="registrationRequest.birthDate"
+              name="birthDate"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>Address</mat-label>
+            <input
+              matInput
+              placeholder="Address"
+              [(ngModel)]="registrationRequest.address"
+              name="address"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="form-field form-field">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="registrationRequest.password"
+              name="password"
+              required
+            />
+          </mat-form-field>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit">
+              Register
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </main>

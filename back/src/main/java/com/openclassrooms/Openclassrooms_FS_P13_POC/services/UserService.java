@@ -10,6 +10,7 @@ import com.openclassrooms.Openclassrooms_FS_P13_POC.DTOs.UserDTO;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.models.User;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.LoginRequest;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.LoginResponse;
+import com.openclassrooms.Openclassrooms_FS_P13_POC.payloads.RegisterRequest;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.repository.UserRepository;
 import com.openclassrooms.Openclassrooms_FS_P13_POC.utils.JwtUtils;
 
@@ -107,5 +108,17 @@ public class UserService {
 	public boolean isUsernameValid(String username) {
 		return username != null && username.length() >= 8;
 	}
+
+	 public User registerRequestToUser(RegisterRequest registerRequest) {
+	        User user = new User();
+	        user.setEmail(registerRequest.getEmail());
+	        String encryptedPwd = JwtUtils.pwdEncoder(registerRequest.getPassword());
+	        user.setPassword(encryptedPwd);
+	        user.setLastName(registerRequest.getLastName());
+	        user.setFirstName(registerRequest.getFirstName());
+	        user.setBirthDate(registerRequest.getBirthDate());
+	        user.setAddress(registerRequest.getAddress());
+	        return user;
+	    }
 
 }
