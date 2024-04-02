@@ -17,4 +17,9 @@ export class UserService {
       `${this.baseUrl}${this.pathService}/${userId}`
     );
   }
+
+  public sendUsername(username: string): Observable<any> {
+    const url = `${this.baseUrl}${this.pathService}/username`;
+    return this.httpClient.post(url, { username });
+  }
 }

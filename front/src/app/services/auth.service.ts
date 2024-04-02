@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegisterRequest } from '../interface/registerRequest.interface';
+import { SessionService } from './session/session.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,10 @@ import { RegisterRequest } from '../interface/registerRequest.interface';
 export class AuthService {
   private baseUrl = 'http://localhost:8080/api/auth'; // Change the port to the one your backend is running on
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private sessionService: SessionService
+  ) {}
 
   login(email: string, password: string): Observable<any> {
     // Send login request to backend
@@ -30,7 +34,6 @@ export class AuthService {
   }
 
   logout(): void {
-    // Perform logout action (e.g., clear local storage, redirect to login page)
-    // ...
+    this.sessionService.logOut();
   }
 }

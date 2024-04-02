@@ -8,7 +8,7 @@ export class UnauthGuard implements CanActivate {
 
   public canActivate(): boolean {
     if (this.sessionService.isLogged) {
-      this.router.navigate(['/themes']);
+      this.router.navigate(['/chatroom']);
       return false;
     }
     return true;
