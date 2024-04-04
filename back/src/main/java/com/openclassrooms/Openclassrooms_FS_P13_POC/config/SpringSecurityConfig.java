@@ -40,7 +40,7 @@ public class SpringSecurityConfig {
 		return http.cors(Customizer.withDefaults()) // Enable CORS
 				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(
-						(auth) -> auth.requestMatchers("/api/auth/*").permitAll().anyRequest().authenticated())
+						(auth) -> auth.requestMatchers("/api/auth/*", "/ws/**").permitAll().anyRequest().authenticated())
 				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
 				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
@@ -48,16 +48,20 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("http://localhost:4200"); // Add your allowed origins here
-		configuration.addAllowedMethod("*"); // Allow all HTTP methods
-		configuration.addAllowedHeader("*"); // Allow all headers
-		configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
+	    CorsConfiguration configuration = new CorsConfiguration();
+	    configuration.addAllowedOriginPattern("*"); // Allow all origins
+	    configuration.addAllowedMethod("*"); // Allow all HTTP methods
+	    configuration.addAllowedHeader("*"); // Allow all headers
+	    configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
 
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
+	    // Expose headers if needed
+	    configuration.addExposedHeader("Authorization");
+
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", configuration);
+	    return source;
 	}
+
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {

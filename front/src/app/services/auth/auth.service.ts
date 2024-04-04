@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RegisterRequest } from '../interface/registerRequest.interface';
-import { SessionService } from './session/session.service';
+import { RegisterRequest } from '../../interface/registerRequest.interface';
+import { SessionService } from '../session/session.service';
 
 @Injectable({
   providedIn: 'root',

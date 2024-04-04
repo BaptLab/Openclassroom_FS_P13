@@ -1,9 +1,6 @@
-// chatroom.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from '../../services/chat.service';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { UserService } from '../../services/httpRequests/user.http.service';
+import { WebSocketService } from '../../services/Websocket/web-socket.service';
+import { ChatMessage } from '../../interface/chatMessage.interface';
 
 @Component({
   selector: 'app-chatroom',
@@ -11,68 +8,47 @@ import { UserService } from '../../services/httpRequests/user.http.service';
   styleUrls: ['./chatroom.component.css'],
 })
 export class ChatroomComponent implements OnInit {
-  connectedUsers: string = 'Loading...';
-  currentUser: string = 'Loading...';
-  messages: string[] = [];
+  messageToSend!: string;
+  messages: ChatMessage[] = [];
+  connectedUsers: string[] = [];
+  currentUserId: string | null = '';
   messageText: string = '';
-  isSocketConnected: boolean = false;
 
-  constructor(
-    private chatService: ChatService,
-    private authService: AuthService,
-    private route: Router,
-    private userHttpService: UserService
-  ) {}
-
-  ngOnInit(): void {
-    // Connect to WebSocket server
-    this.chatService.connectToSocket().subscribe((status: boolean) => {
-      this.isSocketConnected = status;
-      if (status) {
-        // Fetch connected users and current user's name
-        this.authService.getUserData().subscribe((userData: any) => {
-          this.connectedUsers = userData.connectedUsers.join(', ');
-          this.currentUser = userData.currentUser;
-
-          // Send username to backend
-          this.userHttpService.sendUsername(this.currentUser).subscribe(
-            () => {
-              console.log('Username sent to backend successfully.');
-            },
-            (error) => {
-              console.error('Error sending username to backend:', error);
-            }
-          );
-
-          // Subscribe to messages
-          this.subscribeToMessages();
-        });
-      }
-    });
+  constructor(private webSocketService: WebSocketService) {
+    this.currentUserId = localStorage.getItem('user_id');
   }
 
-  // Subscribe to messages
-  subscribeToMessages(): void {
-    this.chatService
-      .connectToChannel('chatroom')
-      .subscribe((message: string) => {
+  ngOnInit(): void {
+    this.webSocketService.connect(this.currentUserId);
+
+    // Subscribe to the 'chatroom' topic
+    this.webSocketService
+      .subscribeToTopic('/topic/chatroom')
+      .subscribe((message: ChatMessage) => {
         this.messages.push(message);
+      });
+
+    // Subscribe to the 'connectedUsers' topic
+    this.webSocketService
+      .subscribeToConnectedUsers()
+      .subscribe((users: string[]) => {
+        this.connectedUsers = users;
       });
   }
 
-  // Function to send a message
   sendMessage(): void {
-    if (this.messageText) {
-      // Send message to WebSocket server
-      this.chatService.sendMessage(this.messageText);
-      // Clear message input
-      this.messageText = '';
-    }
+    const chatMessage: ChatMessage = {
+      message: this.messageToSend,
+      user: this.currentUserId,
+    };
+    // Pass ChatMessage object
+    this.webSocketService.sendMessage(chatMessage);
+    this.messageToSend = ''; // Clear the input field after sending message
   }
 
   logout(): void {
-    // Perform logout action (e.g., call logout method in AuthService)
-    this.authService.logout();
-    this.route.navigate(['/login']);
+    console.log(this.connectedUsers);
+
+    console.log('code de logout method pls');
   }
 }

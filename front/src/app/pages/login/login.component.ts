@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { RegisterRequest } from '../../interface/registerRequest.interface';
 import { LoginRequest } from '../../interface/loginRequest.interface';
 import { AuthSuccess } from '../../interface/authSuccess.interface';

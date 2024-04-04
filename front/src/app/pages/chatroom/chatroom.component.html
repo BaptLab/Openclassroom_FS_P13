@@ -2,17 +2,22 @@
   <div class="left-container">
     <div class="user-infos-container">
       <h2>Online Users</h2>
-      <span>{{ connectedUsers }}</span>
+      <div *ngFor="let user of connectedUsers">{{ user }}</div>
     </div>
     <div class="bottom-user-infos-container">
-      <span>{{ currentUser }}</span>
+      <span>User id : {{ currentUserId }}</span>
       <button mat-raised-button color="basic" (click)="logout()">Logout</button>
     </div>
   </div>
   <div class="chat-container">
     <div class="chat-display-container">
       <!-- Display chat messages here -->
-      <div *ngFor="let message of messages">{{ message }}</div>
+      <div *ngFor="let message of messages">
+        <div class="msg-container">
+          <span class="msg-user">{{ message.user }}</span
+          ><span class="msg-content">{{ message.message }}</span>
+        </div>
+      </div>
     </div>
     <div class="bottom-chat-btns">
       <form class="example-form" (ngSubmit)="sendMessage()">
@@ -23,8 +28,8 @@
             #messageInput
             maxlength="1000"
             placeholder="Type your message..."
-            [(ngModel)]="messageText"
-            name="messageText"
+            [(ngModel)]="messageToSend"
+            name="messageToSend"
             required
           />
         </mat-form-field>
@@ -32,7 +37,7 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="!messageText"
+          [disabled]="!messageToSend"
         >
           Send
         </button>
