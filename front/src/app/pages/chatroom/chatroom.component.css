@@ -59,3 +59,14 @@ main {
 .chat-container .bottom-chat-btns .example-form .example-full-width {
   width: 100%;
 }
+
+.msg-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 11px;
+}
+
+.msg-user {
+  color: rgba(137, 136, 138, 0.692);
+}

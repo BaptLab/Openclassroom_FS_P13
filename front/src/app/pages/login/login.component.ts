@@ -58,7 +58,6 @@ export class LoginComponent {
       .subscribe(
         () => {},
         (error) => {
-          // Handle login error
           console.error('Login error', error);
         }
       );
@@ -68,10 +67,8 @@ export class LoginComponent {
     console.log(formData);
     this.authService.register(formData).subscribe((registered) => {
       if (registered) {
-        // Handle successful registration (e.g., redirect to login page)
         this.router.navigateByUrl('/login');
       } else {
-        // Handle registration failure (e.g., show error message)
       }
     });
   }

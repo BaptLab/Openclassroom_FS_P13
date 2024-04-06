@@ -30,5 +30,18 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format");
 		}
 	}
+	
+	@GetMapping("/{id}/name")
+	public ResponseEntity<?> findNameById(@PathVariable("id") String id) {
+		try {
+			User user = userService.findById(Long.valueOf(id));
+			if (user == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+			}
+			return ResponseEntity.ok().body(user.getFirstName().toString());
+		} catch (NumberFormatException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format");
+		}
+	}
 
 }

@@ -9,18 +9,26 @@ import { ChatMessage } from '../../interface/chatMessage.interface';
 export class WebSocketService {
   private stompClient!: CompatClient;
   private connectionSubject: Subject<void> = new Subject<void>();
+  currentUserId: string = '';
 
-  constructor() {}
+  constructor() {
+    this.currentUserId = localStorage.getItem('user_id') || '';
+  }
 
-  connect(username: any): void {
+  connect(): void {
     const socket = new WebSocket('ws://localhost:8080/ws');
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, () => {
       console.log('Connected to WebSocket');
       // Trigger the connect endpoint after connection is established
-      this.stompClient.send('/app/user/connect', {}, username);
+      this.stompClient.send('/app/user/connect', {}, this.currentUserId);
       this.connectionSubject.next(); // Notify that the connection is established
     });
+  }
+
+  disconnect(): void {
+    console.log('Disconnecting user:', this.currentUserId);
+    this.stompClient.send('/app/user/disconnect', {}, this.currentUserId);
   }
 
   subscribeToConnectedUsers(): Observable<string[]> {

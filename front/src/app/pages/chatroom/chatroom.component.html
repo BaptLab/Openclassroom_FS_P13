@@ -5,7 +5,7 @@
       <div *ngFor="let user of connectedUsers">{{ user }}</div>
     </div>
     <div class="bottom-user-infos-container">
-      <span>User id : {{ currentUserId }}</span>
+      <span>Username : {{ userName }}</span>
       <button mat-raised-button color="basic" (click)="logout()">Logout</button>
     </div>
   </div>
@@ -14,8 +14,8 @@
       <!-- Display chat messages here -->
       <div *ngFor="let message of messages">
         <div class="msg-container">
-          <span class="msg-user">{{ message.user }}</span
-          ><span class="msg-content">{{ message.message }}</span>
+          <span class="msg-user">{{ message.user }}</span>
+          <span class="msg-content">{{ message.message }}</span>
         </div>
       </div>
     </div>

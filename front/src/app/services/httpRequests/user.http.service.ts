@@ -18,6 +18,12 @@ export class UserService {
     );
   }
 
+  public getUserName(userId: string | null): Observable<String> {
+    return this.httpClient.get<String>(
+      `${this.baseUrl}${this.pathService}/${userId}/name`
+    );
+  }
+
   public sendUsername(username: string): Observable<any> {
     const url = `${this.baseUrl}${this.pathService}/username`;
     return this.httpClient.post(url, { username });

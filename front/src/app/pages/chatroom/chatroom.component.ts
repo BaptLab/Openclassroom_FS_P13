@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../../services/Websocket/web-socket.service';
 import { ChatMessage } from '../../interface/chatMessage.interface';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/httpRequests/user.http.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -13,13 +15,18 @@ export class ChatroomComponent implements OnInit {
   connectedUsers: string[] = [];
   currentUserId: string | null = '';
   messageText: string = '';
+  userName: String = '';
 
-  constructor(private webSocketService: WebSocketService) {
+  constructor(
+    private webSocketService: WebSocketService,
+    private router: Router,
+    private userService: UserService
+  ) {
     this.currentUserId = localStorage.getItem('user_id');
   }
 
   ngOnInit(): void {
-    this.webSocketService.connect(this.currentUserId);
+    this.webSocketService.connect();
 
     // Subscribe to the 'chatroom' topic
     this.webSocketService
@@ -34,6 +41,14 @@ export class ChatroomComponent implements OnInit {
       .subscribe((users: string[]) => {
         this.connectedUsers = users;
       });
+
+    // Fetch and subscribe to user's name
+    this.userService
+      .getUserName(this.currentUserId)
+      .subscribe((name: String) => {
+        console.log(name, ': name');
+        this.userName = name;
+      });
   }
 
   sendMessage(): void {
@@ -47,8 +62,8 @@ export class ChatroomComponent implements OnInit {
   }
 
   logout(): void {
-    console.log(this.connectedUsers);
-
-    console.log('code de logout method pls');
+    this.webSocketService.disconnect();
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 }
